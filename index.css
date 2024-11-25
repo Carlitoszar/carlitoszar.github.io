@@ -6,12 +6,11 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    
     background-color: #f4f4f9;
     color: #333;
     line-height: 1.6;
-    font-family: Libre Baskerville
-    ;
+    font-family: Libre Baskerville;
 }
 
 header {
@@ -37,7 +36,7 @@ main {
     padding: 20px;
 }
 
-.mystery {
+.misterio {
     background: white;
     margin-bottom: 20px;
     padding: 20px;
@@ -46,27 +45,56 @@ main {
     transition: transform 0.2s;
 }
 
-.mystery:hover {
+.misterio:hover {
     transform: translateY(-5px);
 }
 
-.mystery h2 {
+.misterio h2 {
     margin-bottom: 10px;
     font-size: 1.8em;
     color: #013220;
 }
 
-.mystery img {
+.misterio img {
     max-width: 100%;
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.mystery p {
+.misterio p {
     font-size: 1.1em;
     color: #555;
 }
+
+main .enlaces a {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #2575fc;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-left: 450px;
+  }
+
+  main .enlaces a:hover {
+    background-color: #1e60d6;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    padding-left: 40%;
+    padding-right: 40%;
+    margin-left: 1%;
+  }
+
+  main .enlaces a:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
 
 footer {
     text-align: center;
