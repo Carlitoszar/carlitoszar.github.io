@@ -1,14 +1,14 @@
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f9;
-  color: #1a1a1a;
+  color: #333;
   margin: 0;
   padding: 0;
 }
 
 header {
   background-color: #2c3e50;
-  color: #ffffff;
+  color: white;
   text-align: center;
   padding: 20px;
 }
@@ -32,29 +32,32 @@ nav ul li {
 }
 
 nav ul li a {
-  color: #ffffff;
+  color: white;
   text-decoration: none;
   padding: 10px 15px;
   display: inline-block;
   transition: background 0.3s, border-radius 0.3s;
 }
 
-nav ul li a:hover,
-nav ul li a:focus {
-  background-color: #117a65;
+nav ul li a:hover {
+  background-color: #1abc9c;
   border-radius: 5px;
-  outline: none;
 }
 
 .submenu,
 .sub-submenu {
   display: none;
   position: absolute;
-  background-color: #117a65;
+  background-color: #1abc9c;
   list-style: none;
   padding: 0;
   min-width: 200px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.submenu {
+  top: 100%;
+  left: 0;
 }
 
 .submenu-item:hover .sub-submenu {
@@ -69,7 +72,7 @@ nav ul li a:focus {
 }
 
 .submenu li a {
-  color: #ffffff;
+  color: white;
   display: block;
   text-decoration: none;
 }
@@ -88,28 +91,27 @@ main {
 }
 
 .caja {
-  background-color: #ffffff;
-  color: #1a1a1a;
+  background: white;
   width: calc(33.33% - 20px);
   margin: 10px;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, color 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   text-align: center;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
 }
 
+.caja h2 {
+  transition: opacity 0.3s ease-in-out;
+}
+
 .caja img {
   max-width: 100%;
   border-radius: 8px;
   height: auto;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.caja h2 {
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -122,7 +124,7 @@ main {
   transform: translate(-50%, -50%);
   width: 80%;
   color: #ffffff;
-  background-color: #00695c; /* fondo más oscuro = más contraste */
+  background-color: #00695c; /* CONTRASTE ALTO con texto blanco */
   padding: 10px;
   border-radius: 8px;
 }
@@ -130,8 +132,8 @@ main {
 .caja:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  background-color: #00695c !important;
-  color: #ffffff;
+  background-color: #00695c; /* Fondo sólido */
+  color: #ffffff; /* Texto blanco */
 }
 
 .caja:hover img {
@@ -146,7 +148,7 @@ footer {
   text-align: center;
   padding: 15px;
   background-color: #2c3e50;
-  color: #ffffff;
+  color: white;
   margin-top: 20px;
 }
 
