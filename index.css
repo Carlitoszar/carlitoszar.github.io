@@ -26,6 +26,7 @@ nav ul {
   z-index: 100;
 }
 
+/* Ítems del menú ---------------------------------------------------------- */
 nav ul li {
   margin: 10px;
   position: relative;
