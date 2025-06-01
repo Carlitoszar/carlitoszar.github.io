@@ -48,7 +48,7 @@ nav ul li a:hover {
 .sub-submenu {
   display: none;
   position: absolute;
-  background-color: #148f77; /* cambiado desde #1abc9c */
+  background-color: #148f77;
   list-style: none;
   padding: 0;
   min-width: 200px;
