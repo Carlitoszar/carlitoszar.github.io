@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Clientes - Medicloud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="dashboard-container">
+
+    <header class="dashboard-header glass-panel">
+      <div class="user-info">
+        <div
+          style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+          A
+        </div>
+        <div>
+          <h2 style="margin:0; font-size: 1.2rem;">Gestión de Clientes</h2>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Demo estática (GitHub Pages)</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:1rem;">
+        <a href="admin_dashboard.html" class="btn-primary" style="text-decoration:none; padding: 0.5rem 1rem;">Volver</a>
+        <a href="logout.html" class="logout-link">Cerrar Sesión</a>
+      </div>
+    </header>
+
+    <div class="glass-panel" style="margin-bottom:1.5rem;">
+      <h3 style="margin-bottom:1rem;">Añadir cliente (demo)</h3>
+
+      <div id="msg"></div>
+
+      <form id="clientForm" style="display:grid; gap:1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <div class="form-group">
+          <label>Empresa</label>
+          <input id="empresa" type="text" required placeholder="Nombre empresa">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input id="email" type="email" required placeholder="correo@empresa.com">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input id="telefono" type="text" placeholder="+34 ...">
+        </div>
+        <div class="form-group" style="align-self:end;">
+          <button class="btn-primary" type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="glass-panel">
+      <h3 style="margin-bottom:1rem;">Clientes activos</h3>
+      <div style="overflow:auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Estado</th>
+              <th style="text-align:right;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="clientsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    MedicloudAuth.requireRole('admin');
+
+    function render() {
+      const tbody = document.getElementById('clientsTbody');
+      tbody.innerHTML = '';
+      const clients = MedicloudData.getClients();
+
+      clients.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(c.nombre_empresa)}</td>
+          <td>${escapeHtml(c.email)}</td>
+          <td>${escapeHtml(c.telefono || '-')}</td>
+          <td><span class="badge">${escapeHtml(c.estado)}</span></td>
+          <td style="text-align:right;">
+            <button class="btn-danger" data-id="${c.id}" style="padding:.45rem .8rem;">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('button[data-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          MedicloudData.deleteClient(btn.dataset.id);
+          logEvent('admin', `Eliminación de cliente (demo)`, btn.dataset.id);
+          render();
+        });
+      });
+    }
+
+    document.getElementById('clientForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const empresa = document.getElementById('empresa').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+
+      MedicloudData.addClient({ nombre_empresa: empresa, email, telefono });
+      logEvent('admin', `Alta de cliente (demo)`, empresa);
+
+      document.getElementById('clientForm').reset();
+      render();
+    });
+
+    function escapeHtml(str){return (str ?? '').toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));}
+    function logEvent(actor, action, ref){ MedicloudData.addLog({actor, action, ref}); }
+
+    render();
+  </script>
+</body>
+</html>

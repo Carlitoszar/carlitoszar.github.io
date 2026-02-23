@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Logs - Medicloud</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+
+    <div class="topbar glass">
+      <div class="brand">
+        <div class="avatar">←</div>
+        <div>
+          <h1>Logs de Auditoría y Seguridad</h1>
+          <div class="sub">Mostrando últimos 50 eventos</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="admin_dashboard.html">Volver</a>
+        <a class="link" href="logout.html">Cerrar Sesión</a>
+      </div>
+    </div>
+
+    <div class="section glass">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Acción</th>
+              <th>Tabla</th>
+              <th>Actor</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody id="logsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    MedicloudAuth.requireRole('admin');
+
+    function esc(x){ return (x ?? '').toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m])); }
+
+    function render(){
+      const logs = MedicloudData.getLogs().slice(0,50);
+      const d = MedicloudData.getData();
+      const tbody = document.getElementById('logsTbody');
+      tbody.innerHTML = '';
+
+      logs.forEach((l, idx)=>{
+        const client = d.clients[0]?.nombre_empresa || 'Clínica Demo S.L.';
+        const actor = l.actor === 'admin' ? 'empleado (ID: 1)' : (l.actor === 'client' ? 'usuario_cliente (ID: 1)' : 'system');
+        const action = (l.action || '').includes('Login') ? 'LOGIN' : ((l.action || '').includes('DELETE') ? 'DELETE' : 'INSERT');
+        const tabla = (l.action || '').includes('document') ? 'documentos' : 'usuarios';
+        const desc = l.action || 'Evento (demo)';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>#${esc(50-idx)}</td>
+          <td>${esc(new Date(l.ts).toLocaleString())}</td>
+          <td>${esc(client)}</td>
+          <td><span class="badge ok">${esc(action)}</span></td>
+          <td>${esc(tabla)}</td>
+          <td>${esc(actor)}</td>
+          <td>${esc(desc)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

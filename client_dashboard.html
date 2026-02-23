@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel Cliente - Medicloud</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+
+    <div class="topbar glass">
+      <div class="brand">
+        <div class="avatar" id="cAvatar">C</div>
+        <div>
+          <h1 id="cName">Clínica Demo S.L.</h1>
+          <div class="sub">Juan Médico</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="link" href="logout.html">Cerrar Sesión</a>
+      </div>
+    </div>
+
+    <div class="section glass">
+      <div class="section-title">Subir Documentos</div>
+      <div class="section-sub">Arrastre archivos aquí o haga clic para seleccionar.</div>
+
+      <form id="uploadForm">
+        <input id="fileInput" type="file" hidden />
+        <div class="drop" id="drop">
+          ☁️<br/>
+          Click para seleccionar archivo
+        </div>
+      </form>
+
+      <div id="msg" style="margin-top:12px; font-size:12px; color: rgba(134,239,172,.9); font-weight:800;"></div>
+    </div>
+
+    <div class="section glass">
+      <div class="section-title">Mis Documentos</div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Tamaño</th>
+              <th>Subido Por</th>
+              <th>Fecha</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="docsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    MedicloudAuth.requireRole('client');
+
+    const s = MedicloudAuth.getSession();
+    const d = MedicloudData.getData();
+    const client = d.clients.find(x=>x.id===s.clientId) || d.clients[0];
+
+    document.getElementById('cAvatar').textContent = (client?.nombre_empresa || 'C').slice(0,1).toUpperCase();
+    document.getElementById('cName').textContent = client?.nombre_empresa || 'Clínica Demo S.L.';
+
+    function esc(x){ return (x ?? '').toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m])); }
+
+    function render(){
+      const docs = MedicloudData.getClientDocs(s.clientId);
+      const tbody = document.getElementById('docsTbody');
+      tbody.innerHTML = '';
+
+      docs.forEach(doc=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${esc(doc.nombre)}</td>
+          <td>PDF</td>
+          <td>${esc(MedicloudData.formatBytes(doc.sizeBytes))}</td>
+          <td>Usuario</td>
+          <td>${esc(new Date(doc.ts).toLocaleString())}</td>
+          <td>
+            <a class="a" href="#" onclick="alert('Demo: descarga no disponible en GitHub Pages');return false;">Descargar</a>
+            &nbsp;|&nbsp;
+            <a class="a danger" href="#" data-del="${esc(doc.id)}">Eliminar</a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-del]').forEach(a=>{
+        a.addEventListener('click', (e)=>{
+          e.preventDefault();
+          MedicloudData.deleteDoc(a.dataset.del);
+          MedicloudData.addLog({actor:'client', action:'DELETE documentos (demo)', ref:a.dataset.del});
+          render();
+        });
+      });
+    }
+
+    // dropzone demo
+    const drop = document.getElementById('drop');
+    const fileInput = document.getElementById('fileInput');
+    const msg = document.getElementById('msg');
+
+    drop.addEventListener('click', ()=> fileInput.click());
+    fileInput.addEventListener('change', ()=>{
+      const f = fileInput.files[0];
+      if(!f) return;
+
+      MedicloudData.addDoc({ clientId: s.clientId, nombre: f.name, sizeBytes: f.size });
+      MedicloudData.addLog({actor:'client', action:'INSERT documentos (demo)', ref:f.name});
+
+      msg.textContent = 'Archivo subido exitosamente.';
+      fileInput.value = '';
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

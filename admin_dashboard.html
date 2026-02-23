@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel Administración - Medicloud</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+
+    <div class="topbar glass">
+      <div class="brand">
+        <div class="avatar" id="avatar">A</div>
+        <div>
+          <h1>Panel Administración</h1>
+          <div class="sub" id="userMeta">Super Admin / (admin)</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="admin_logs.html">Ver Logs Auditoría</a>
+        <a class="link" href="logout.html">Cerrar Sesión</a>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat glass">
+        <div class="label">Clientes Activos</div>
+        <div class="value blue" id="statClientes">-</div>
+      </div>
+      <div class="stat glass">
+        <div class="label">Usuarios Clientes</div>
+        <div class="value purple" id="statUsers">-</div>
+      </div>
+      <div class="stat glass">
+        <div class="label">Documentos</div>
+        <div class="value green" id="statDocs">-</div>
+      </div>
+      <div class="stat glass">
+        <div class="label">Almacenamiento</div>
+        <div class="value orange" id="statStorage">-</div>
+      </div>
+    </div>
+
+    <div class="section glass">
+      <div class="section-title">Accesos Rápidos</div>
+      <div class="quick">
+        <a class="btn btn-ghost" href="manage_clients.html">Gestión de Clientes</a>
+      </div>
+    </div>
+
+    <div class="section glass">
+      <div class="section-title">Todos los Documentos</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Archivo</th>
+              <th>Tipo</th>
+              <th>Tamaño</th>
+              <th>Subido Por</th>
+              <th>Fecha</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="docsAdminTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    MedicloudAuth.requireRole('admin');
+
+    const s = MedicloudAuth.getSession();
+    document.getElementById('avatar').textContent = (s?.name || 'Admin').slice(0,1).toUpperCase();
+    document.getElementById('userMeta').textContent = `Administrador (${s?.role || 'admin'})`;
+
+    const stats = MedicloudData.getStats();
+    document.getElementById('statClientes').textContent = stats.clientes;
+    document.getElementById('statUsers').textContent = stats.usuariosClientes;
+    document.getElementById('statDocs').textContent = stats.documentos;
+    document.getElementById('statStorage').textContent = stats.storageReadable;
+
+    // Tabla “Todos los Documentos” (demo) usando el store
+    function esc(x){ return (x ?? '').toString().replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m])); }
+
+    function renderDocs(){
+      const d = MedicloudData.getData();
+      const tbody = document.getElementById('docsAdminTbody');
+      tbody.innerHTML = '';
+
+      d.docs.slice().sort((a,b)=>b.ts-a.ts).forEach(doc=>{
+        const client = d.clients.find(c=>c.id===doc.clientId);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>#${esc(doc.id)}</td>
+          <td>${esc(client?.nombre_empresa || doc.clientId)}</td>
+          <td>${esc(doc.nombre)}</td>
+          <td>PDF</td>
+          <td>${esc(MedicloudData.formatBytes(doc.sizeBytes))}</td>
+          <td>usuario_cliente</td>
+          <td>${esc(new Date(doc.ts).toLocaleString())}</td>
+          <td>
+            <a class="a" href="#" onclick="alert('Demo: descarga no disponible en GitHub Pages');return false;">Descargar</a>
+            &nbsp;|&nbsp;
+            <a class="a danger" href="#" data-del="${esc(doc.id)}">Eliminar</a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-del]').forEach(a=>{
+        a.addEventListener('click', (e)=>{
+          e.preventDefault();
+          MedicloudData.deleteDoc(a.dataset.del);
+          MedicloudData.addLog({actor:'admin', action:'DELETE documentos (demo)', ref:a.dataset.del});
+          renderDocs();
+        });
+      });
+    }
+
+    renderDocs();
+  </script>
+</body>
+</html>
