@@ -40,24 +40,32 @@
     saveJSON(KEY_DATA, seed);
 
 // =========================
-// Cookies (banner simple)
+// Cookies banner (robusto)
 // =========================
 (function () {
-  const banner = document.getElementById('cookieBanner');
-  const acceptBtn = document.getElementById('acceptCookies');
+  function initCookies() {
+    const banner = document.getElementById('cookieBanner');
+    const acceptBtn = document.getElementById('acceptCookies');
+    if (!banner || !acceptBtn) return;
 
-  if (!banner || !acceptBtn) return;
+    // Mostrar solo si NO aceptado
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+      banner.style.display = 'none';
+      return;
+    }
+    banner.style.display = 'flex';
 
-  // Si ya aceptó cookies, no mostrar
-  if (localStorage.getItem('cookiesAccepted') === 'true') {
-    banner.style.display = 'none';
-    return;
+    acceptBtn.addEventListener('click', () => {
+      localStorage.setItem('cookiesAccepted', 'true');
+      banner.style.display = 'none';
+    }, { once: true });
   }
 
-  acceptBtn.addEventListener('click', () => {
-    localStorage.setItem('cookiesAccepted', 'true');
-    banner.style.display = 'none';
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCookies);
+  } else {
+    initCookies();
+  }
 })();
 
 

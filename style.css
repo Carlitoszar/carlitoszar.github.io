@@ -42,71 +42,74 @@ body{
 }
 
 /* =========================
-   Cookie banner (compacto, estilo documento)
+   Cookie banner FIX (GitHub)
 ========================= */
 .cookie-banner{
-  position: fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  z-index: 9999;
+  position: fixed !important;
+  left: 50% !important;
+  bottom: 18px !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
 
-  width: min(920px, calc(100% - 40px));
-  padding: 14px 16px;
+  width: min(920px, calc(100% - 28px)) !important;
+  padding: 14px 16px !important;
 
-  background: rgba(15, 23, 42, 0.78);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 14px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 18px 55px rgba(0,0,0,0.45);
+  background: rgba(15, 23, 42, 0.78) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(14px) !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,0.45) !important;
 }
 
 .cookie-text{
-  font-size: 12px;
-  line-height: 1.35;
-  color: rgba(234,240,255,0.78);
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  color: rgba(234,240,255,0.78) !important;
 }
 
 .cookie-link{
-  color: #7dd3fc;
-  font-weight: 800;
-  text-decoration: none;
+  color: #7dd3fc !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
 }
-.cookie-link:hover{ text-decoration: underline; }
+.cookie-link:hover{ text-decoration: underline !important; }
 
-/* Botón pequeño, igual de look que los tuyos */
-.btn-cookie{
+.cookie-btn{
   width: auto !important;
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 900;
-  background: linear-gradient(135deg, #27b5ff, #0ea5e9);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #fff;
-  cursor: pointer;
-  transition: transform .12s ease, filter .12s ease;
+  min-width: 120px !important;
+  padding: 10px 16px !important;
+  border-radius: 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  background: linear-gradient(135deg, #27b5ff, #0ea5e9) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  transition: transform .12s ease, filter .12s ease !important;
 }
-.btn-cookie:hover{
-  transform: translateY(-1px);
-  filter: brightness(1.05);
+.cookie-btn:hover{
+  transform: translateY(-1px) !important;
+  filter: brightness(1.05) !important;
 }
 
-/* En móvil que se apile bonito */
 @media (max-width: 560px){
   .cookie-banner{
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: column !important;
+    align-items: stretch !important;
   }
-  .btn-cookie{
+  .cookie-btn{
     width: 100% !important;
   }
 }
+
+
+
+
 
 /* Botón login igual al del documento */
 .login-container .btn-primary{
