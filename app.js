@@ -39,6 +39,28 @@
 
     saveJSON(KEY_DATA, seed);
 
+// =========================
+// Cookies (banner simple)
+// =========================
+(function () {
+  const banner = document.getElementById('cookieBanner');
+  const acceptBtn = document.getElementById('acceptCookies');
+
+  if (!banner || !acceptBtn) return;
+
+  // Si ya aceptó cookies, no mostrar
+  if (localStorage.getItem('cookiesAccepted') === 'true') {
+    banner.style.display = 'none';
+    return;
+  }
+
+  acceptBtn.addEventListener('click', () => {
+    localStorage.setItem('cookiesAccepted', 'true');
+    banner.style.display = 'none';
+  });
+})();
+
+
     // logs iniciales
     if (!localStorage.getItem(KEY_LOGS)) {
       saveJSON(KEY_LOGS, [

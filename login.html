@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
+
 <body>
   <div class="login-container">
     <div class="login-header">
@@ -68,5 +69,15 @@
       if (res.role === 'client') location.href = 'client_dashboard.html';
     });
   </script>
+
+    <div id="cookieBanner" class="cookie-banner">
+    <p>
+      Utilizamos cookies técnicas para garantizar el correcto funcionamiento del sitio.
+      <a href="#" onclick="alert('Cookies técnicas necesarias para el funcionamiento.');">
+        Más información
+      </a>
+    </p>
+    <button id="acceptCookies" class="btn-primary">Aceptar</button>
+  </div>
 </body>
 </html>

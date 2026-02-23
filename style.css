@@ -41,6 +41,40 @@ body{
     linear-gradient(180deg, var(--bg1), var(--bg2));
 }
 
+/* =========================
+   Cookies banner
+========================= */
+.cookie-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  padding: 1rem 1.5rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  z-index: 9999;
+  max-width: 90%;
+  font-size: 0.85rem;
+}
+
+.cookie-banner p {
+  margin: 0;
+  color: #cbd5f5;
+}
+
+.cookie-banner a {
+  color: #38bdf8;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+
 /* ====== panel glass genérico ====== */
 .glass{
   background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
@@ -322,3 +356,4 @@ tbody tr:hover{
   .stats{ grid-template-columns: 1fr; }
   table{ min-width: 720px; }
 }
+
